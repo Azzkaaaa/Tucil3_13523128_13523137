@@ -77,4 +77,29 @@ public class Board {
 
         return new Board(rows, cols, newGrid, newPieces, exitRow, exitCol);
     }
+
+    public void printBoard() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (i == exitRow && j == exitCol) {
+                    System.out.print('K');
+                } else {
+                    System.out.print(grid[i][j]);
+                }
+            }
+
+            if (exitRow == i && exitCol == cols) {
+                System.out.print('K');
+            }
+
+            System.out.println();
+        }
+
+        if (exitRow == rows) {
+            for (int j = 0; j < exitCol; j++) {
+                System.out.print(' ');
+            }
+            System.out.println('K');
+        }
+}
 }
