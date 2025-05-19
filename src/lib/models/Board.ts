@@ -73,9 +73,12 @@ export class Board {
             output.push(topLine);
         }
     
-        // Grid rows (with possible left/right exit)
+        // Grid rows
         for (let i = 0; i < this.rows; i++) {
             let line = "";
+            if (this.exitCol === -1 && this.exitRow !== i) {
+                line = " ";
+            }
     
             // Left exit
             if (this.exitRow === i && this.exitCol === -1) {
