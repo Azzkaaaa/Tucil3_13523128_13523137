@@ -1,12 +1,11 @@
 "use client";
 
-import { Board } from "@/lib/models/Board";
 import { parseBoardFromString } from "@/lib/utils/Parser";
-import React, {useState } from "react";
+import useInputSearchStore from "@/store/InputSearchStore";
+import React from "react";
 
 const Loader = () => {
-  const [fileContent, setFileContent] = useState<string | null>(null);
-  const [board, setBoard] = useState<Board | null>(null);
+  const setBoard = useInputSearchStore((state) => state.setBoard);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -14,13 +13,11 @@ const Loader = () => {
       const reader = new FileReader();
       reader.onload = (event) => {
         const text = event.target?.result as string;
-        const boardFromText = parseBoardFromString(text);
-        boardFromText?.printBoard();
-        setBoard(boardFromText);
-        if (boardFromText) {
-            setFileContent(boardFromText.printBoard());
+        const board = parseBoardFromString(text);
+        if (board) {
+          setBoard(board);
         }
-    };
+      };
       reader.readAsText(file);
     } else {
       alert("Please upload a .txt file");
@@ -28,7 +25,7 @@ const Loader = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto rounded-2xl shadow-md bg-rush-primary text-white">
+    <div className="p-6 h-full w-2/5 rounded-2xl shadow-md bg-rush-primary text-rush-secondary">
       <h2 className="text-2xl font-semibold mb-4">Insert Game Configuration {`(.txt)`}</h2>
 
       <label className="block mb-4">
@@ -36,22 +33,14 @@ const Loader = () => {
           type="file"
           accept=".txt"
           onChange={handleFileChange}
-          className="block w-full text-sm text-gray-200
+          className="block w-full text-sm text-rush-secondary
                      file:mr-4 file:py-2 file:px-4
                      file:rounded-full file:border-0
                      file:text-sm file:font-semibold
-                     file:bg-white file:text-rush-primary
-                     hover:file:bg-gray-100 file:hover:cursor-pointer"
+                     file:bg-rush-accent-2 file:text-rush-secondary
+                     hover:file:bg-rush-accent-2/90 file:hover:cursor-pointer"
         />
       </label>
-
-      {fileContent ? (
-        <pre className="whitespace-pre-wrap bg-white text-gray-800 p-4 rounded-lg max-h-96 overflow-y-auto border border-gray-300">
-          {fileContent}
-        </pre>
-      ) : (
-        <p className="text-gray-200 italic">No file loaded.</p>
-      )}
     </div>
   );
 };
