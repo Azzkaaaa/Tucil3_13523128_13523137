@@ -7,12 +7,14 @@ import { UCSAlgorithm } from "@/lib/algorithms/ucs";
 import { AStarAlgorithm } from "@/lib/algorithms/a-star";
 import { GBFSAlgorithm } from "@/lib/algorithms/gbfs";
 import { SearchResult } from "@/lib/models/SearchResult";
+import { BeamSearchAlgorithm } from "@/lib/algorithms/beamSearch";
 
 // Algorithm Type
 export enum AlgorithmType {
   UCS = "ucs",
   GBFS = "gbfs",
   ASTAR = "a-star",
+  BEAM = "beam-search",
 }
 
 // Heuristic Type
@@ -32,6 +34,7 @@ interface GameState {
   currentMoveIndex: number;
   isAnimating: boolean;
   animationSpeed: number;
+  beamWidth: number;
 
   setBoard: (board: Board) => void;
   setAlgorithm: (algorithm: AlgorithmType) => void;
@@ -45,6 +48,7 @@ interface GameState {
   stopAnimation: () => void;
   setAnimationSpeed: (speed: number) => void;
   getCurrentBoard: () => Board | null;
+  setBeamWidth: (beam: number) => void;
 }
 
 // Create store
@@ -57,6 +61,7 @@ const useGameStore = create<GameState>((set, get) => ({
   currentMoveIndex: -1,
   isAnimating: false,
   animationSpeed: 500, // milliseconds per move
+  beamWidth: 5, // default
 
   setBoard: (board) =>
     set({
@@ -72,7 +77,7 @@ const useGameStore = create<GameState>((set, get) => ({
   setHeuristic: (heuristic) => set({ selectedHeuristic: heuristic }),
 
   solvePuzzle: () => {
-    const { board, selectedAlgorithm, selectedHeuristic } = get();
+    const { board, selectedAlgorithm, selectedHeuristic, beamWidth } = get();
     if (!board) return;
 
     let solution: SearchResult | null = null;
@@ -86,6 +91,9 @@ const useGameStore = create<GameState>((set, get) => ({
         break;
       case AlgorithmType.GBFS:
         solution = GBFSAlgorithm.search(board, selectedHeuristic);
+        break;
+      case AlgorithmType.BEAM:
+        solution = BeamSearchAlgorithm.search(board, selectedHeuristic, beamWidth);
         break;
       default:
         solution = UCSAlgorithm.search(board);
@@ -171,6 +179,7 @@ const useGameStore = create<GameState>((set, get) => ({
 
     return currentBoard;
   },
+  setBeamWidth: (beam: number) => set({ beamWidth: beam }),
 }));
 
 export default useGameStore;

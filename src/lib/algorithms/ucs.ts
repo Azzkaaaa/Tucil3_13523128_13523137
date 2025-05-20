@@ -41,7 +41,6 @@ export class UCSAlgorithm {
       
       // All possible moves
       const possibleMoves = MovementManager.getPossibleMoves(current.board);
-      console.log("move: ", possibleMoves);
       
       for (const move of possibleMoves) {
         // Apply move

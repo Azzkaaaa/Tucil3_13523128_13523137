@@ -83,6 +83,12 @@ const SolutionDisplay = () => {
                     Pause
                   </button>
                 )}
+                <button
+                  onClick={() => jumpToMove(-1)}
+                  disabled={currentMoveIndex < 0}
+                  className="bg-rush-accent-1 text-rush-primary px-3 py-1 rounded-lg disabled:opacity-50">
+                  Reset
+                </button>
               </div>
             </div>
 
@@ -90,9 +96,9 @@ const SolutionDisplay = () => {
               <label className="block text-sm font-medium mb-2">Animation Speed: {animationSpeed}ms</label>
               <input
                 type="range"
-                min="100"
+                min="10"
                 max="2000"
-                step="100"
+                step="10"
                 value={animationSpeed}
                 onChange={(e) => setAnimationSpeed(Number(e.target.value))}
                 className="w-full"
