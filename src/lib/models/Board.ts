@@ -45,13 +45,32 @@ export class Board {
 
         if (!primary) return false;
 
+        // Horizontal
         if (primary.isHorizontal) {
-            return primary.col + primary.length - 1 === this.exitCol &&
-                   primary.row === this.exitRow;
-        } else {
-            return primary.row + primary.length - 1 === this.exitRow &&
-                   primary.col === this.exitCol;
+            // Right exit
+            if (this.exitCol === this.cols) {
+                return primary.row === this.exitRow && 
+                       primary.col + primary.length - 1 === this.cols - 1;
+            }
+            // Left exit
+            else if (this.exitCol === -1) {
+                return primary.row === this.exitRow && primary.col === 0;
+            }
+        } 
+        else {
+            // Vertical
+            // Bottom exit
+            if (this.exitRow === this.rows) {
+                return primary.col === this.exitCol && 
+                       primary.row + primary.length - 1 === this.rows - 1;
+            }
+            // Top exit
+            else if (this.exitRow === -1) {
+                return primary.col === this.exitCol && primary.row === 0;
+            }
         }
+                
+        return false;
     }
 
     copy(): Board {
