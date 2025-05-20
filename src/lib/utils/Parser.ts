@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { Board } from "../models/Board";
 import { Piece } from "../models/Piece";
 
@@ -65,7 +66,7 @@ export function parseBoardFromString(content: string): Board | null {
     exitRow > rows ||
     exitCol > cols
   ) {
-    alert("Exit should intact horizontally / vertically with cars");
+    toast.error("Exit should intact horizontally / vertically with cars");
   }
 
   // Make grid
