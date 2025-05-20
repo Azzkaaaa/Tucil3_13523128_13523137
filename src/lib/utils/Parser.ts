@@ -45,15 +45,8 @@ export function parseBoardFromString(content: string): Board | null {
     }
 
     // Check if file has enough lines to contain the complete board configuration
-    // Maximum expected: 2 + rows + 1 (K on top or bottom)
     // Minimum expected: 2 (dimensions, pieceCount) + rows (grid lines)
-    if (lines.length > 2 + rows + 1) {
-      toast.error("Invalid file format", {
-        description: `The file contains too many lines. Expected at most ${2 + rows + 2} lines.`,
-      });
-      return null;
-    }
-
+    // Maximum expected: 2 + rows + 2 (possible K on top and bottom)
     if (lines.length < 2 + rows) {
       toast.error("Invalid file format", {
         description: `The file does not contain enough lines for the board configuration. Expected at least ${2 + rows} lines.`,
@@ -61,8 +54,16 @@ export function parseBoardFromString(content: string): Board | null {
       return null;
     }
 
-    // Identify Exit Position (vertical)
+    if (lines.length > 2 + rows + 2) {
+      toast.error("Invalid file format", {
+        description: `The file contains too many lines. Expected at most ${2 + rows + 2} lines.`,
+      });
+      return null;
+    }
+
+    // Identify possible K positions in the file
     let hasTopExit = false;
+    let hasBottomExit = false;
 
     // Top Exit
     if (lines[2].includes("K") && !lines[2].includes(".") && !lines[2].match(/[A-Z]/g)?.filter((char) => char !== "K").length) {
@@ -72,7 +73,7 @@ export function parseBoardFromString(content: string): Board | null {
     // Bottom Exit
     const lastLine = lines[lines.length - 1];
     if (lastLine.includes("K") && !lastLine.includes(".") && !lastLine.match(/[A-Z]/g)?.filter((char) => char !== "K").length) {
-      hasTopExit = false;
+        hasBottomExit = true;
     }
 
     // Grid line start based on exit position
@@ -120,7 +121,7 @@ export function parseBoardFromString(content: string): Board | null {
     }
 
     // Bottom exit
-    if (!hasTopExit) {
+    if (hasBottomExit) {
       exitRow = rows;
       exitCol = lines[lines.length - 1].indexOf("K");
       if (exitCol < 0 || exitCol >= cols) {
