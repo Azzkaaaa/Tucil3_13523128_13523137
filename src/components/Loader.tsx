@@ -3,6 +3,7 @@
 import { parseBoardFromString } from "@/lib/utils/Parser";
 import useGameStore from "@/store/GameStore";
 import React from "react";
+import { toast } from "sonner";
 
 const Loader = () => {
   const setBoard = useGameStore((state) => state.setBoard);
@@ -20,7 +21,7 @@ const Loader = () => {
       };
       reader.readAsText(file);
     } else {
-      alert("Please upload a .txt file");
+      toast.warning("Please upload a .txt file");
     }
   };
 
