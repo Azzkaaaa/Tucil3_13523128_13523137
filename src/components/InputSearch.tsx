@@ -21,7 +21,7 @@ const InputSearch = () => {
         </div>
         <div className="flex flex-col justify-center items-center gap-5 w-2/5">
           <AlgoInput />
-          {selectedAlgorithm !== AlgorithmType.UCS && <HeuristicInput />}
+          {selectedAlgorithm !== AlgorithmType.UCS && selectedAlgorithm !== AlgorithmType.BEAM && <HeuristicInput />}
           {!solution && (
             <button
               className="py-2 px-4 w-1/2 bg-rush-accent-2 rounded-3xl text-rush-secondary font-bold hover:cursor-pointer hover:bg-rush-primary/80 hover:text-rush-accent-1"
