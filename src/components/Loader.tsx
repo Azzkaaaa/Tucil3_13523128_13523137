@@ -1,11 +1,11 @@
 "use client";
 
 import { parseBoardFromString } from "@/lib/utils/Parser";
-import useInputSearchStore from "@/store/InputSearchStore";
+import useGameStore from "@/store/GameStore";
 import React from "react";
 
 const Loader = () => {
-  const setBoard = useInputSearchStore((state) => state.setBoard);
+  const setBoard = useGameStore((state) => state.setBoard);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
