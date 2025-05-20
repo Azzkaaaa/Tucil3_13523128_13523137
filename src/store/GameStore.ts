@@ -3,7 +3,10 @@
 import { create } from "zustand";
 import { Board } from "@/lib/models/Board";
 import { Move, MovementManager } from "@/lib/utils/Move";
-import { SearchResult, UCSAlgorithm } from "@/lib/algorithms/ucs";
+import { UCSAlgorithm } from "@/lib/algorithms/ucs";
+import { AStarAlgorithm } from "@/lib/algorithms/a-star";
+import { GBFSAlgorithm } from "@/lib/algorithms/gbfs";
+import { SearchResult } from "@/lib/models/SearchResult";
 
 // Algorithm Type
 export enum AlgorithmType {
@@ -69,7 +72,7 @@ const useGameStore = create<GameState>((set, get) => ({
   setHeuristic: (heuristic) => set({ selectedHeuristic: heuristic }),
 
   solvePuzzle: () => {
-    const { board, selectedAlgorithm } = get();
+    const { board, selectedAlgorithm, selectedHeuristic } = get();
     if (!board) return;
 
     let solution: SearchResult | null = null;
@@ -78,10 +81,12 @@ const useGameStore = create<GameState>((set, get) => ({
       case AlgorithmType.UCS:
         solution = UCSAlgorithm.search(board);
         break;
-    //   case AlgorithmType.GBFS:
-    //     break;
-    //   case AlgorithmType.ASTAR:
-    //     break;
+      case AlgorithmType.ASTAR:
+        solution = AStarAlgorithm.search(board, selectedHeuristic);
+        break;
+      case AlgorithmType.GBFS:
+        solution = GBFSAlgorithm.search(board, selectedHeuristic);
+        break;
       default:
         solution = UCSAlgorithm.search(board);
     }
