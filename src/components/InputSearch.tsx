@@ -7,6 +7,7 @@ import HeuristicInput from "./HeuristicInput";
 import RenderBoard from "./RenderBoard";
 import useGameStore, { AlgorithmType } from "@/store/GameStore";
 import SolutionDisplay from "./Solution";
+import Save from "./Save";
 
 const InputSearch = () => {
   const { solvePuzzle, solution, resetSolution, selectedAlgorithm } = useGameStore();
@@ -35,6 +36,7 @@ const InputSearch = () => {
       {solution && (
         <div className="w-full flex flex-col justify-center items-center gap-5">
           <SolutionDisplay />
+          <Save />
           <button
             onClick={resetSolution}
             className="py-2 px-4 w-1/3 bg-rush-accent-2 rounded-3xl text-rush-secondary font-bold hover:cursor-pointer hover:bg-rush-primary/80 hover:text-rush-accent-1">
