@@ -5,11 +5,11 @@ import Loader from "./Loader";
 import AlgoInput from "./AlgoInput";
 import HeuristicInput from "./HeuristicInput";
 import RenderBoard from "./RenderBoard";
-import useGameStore from "@/store/GameStore";
+import useGameStore, { AlgorithmType } from "@/store/GameStore";
 import SolutionDisplay from "./Solution";
 
 const InputSearch = () => {
-  const { solvePuzzle, solution, resetSolution } = useGameStore();
+  const { solvePuzzle, solution, resetSolution, selectedAlgorithm } = useGameStore();
 
   return (
     <div className="w-2/3 bg-rush-secondary rounded-2xl p-5 flex flex-col justify-center items-center">
@@ -21,7 +21,7 @@ const InputSearch = () => {
         </div>
         <div className="flex flex-col justify-center items-center gap-5 w-2/5">
           <AlgoInput />
-          <HeuristicInput />
+          {selectedAlgorithm !== AlgorithmType.UCS && <HeuristicInput />}
           {!solution && (
             <button
               className="py-2 px-4 w-1/2 bg-rush-accent-2 rounded-3xl text-rush-secondary font-bold hover:cursor-pointer hover:bg-rush-primary/80 hover:text-rush-accent-1"
