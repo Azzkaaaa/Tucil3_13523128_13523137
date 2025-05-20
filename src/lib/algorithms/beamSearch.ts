@@ -97,8 +97,7 @@ export class BeamSearchAlgorithm {
       // If no successors, failed
       if (successorQueue.length === 0) {
         const endTime = performance.now();
-        console.log(`Beam Search failed after exploring ${nodesVisited} nodes`);
-
+        
         return {
           success: false,
           path: [],
