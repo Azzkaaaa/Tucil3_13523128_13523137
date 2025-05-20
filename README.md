@@ -23,6 +23,8 @@ npm install
 ## 🏗️ Cara Menjalankan (Development)
 ```bash
 npm run dev
+# atau jika menggunakan yarn
+# yarn dev
 ```
 
 ## 🚀 Cara Build (Production)
