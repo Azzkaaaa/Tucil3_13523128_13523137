@@ -1,17 +1,10 @@
 "use client";
 
 import { Board } from "../models/Board";
-import { MovementManager, Move } from "../utils/Move";
+import { MovementManager } from "../utils/Move";
 import { SearchNode } from "../models/SearchNode";
 import PriorityQueue from "ts-priority-queue";
-
-// Result search
-export interface SearchResult {
-  success: boolean;
-  path: Move[];
-  nodesVisited: number;
-  executionTime: number;
-}
+import { SearchResult } from "../models/SearchResult";
 
 // UCS Algorithm
 export class UCSAlgorithm {
