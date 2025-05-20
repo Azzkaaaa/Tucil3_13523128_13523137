@@ -6,6 +6,7 @@ import { SearchNode } from "../models/SearchNode";
 import { HeuristicType } from "@/store/GameStore";
 import { SearchResult } from "../models/SearchResult";
 import { Heuristics } from "./heuristics";
+import PriorityQueue from "ts-priority-queue";
 
 // Beam Search Algorithm
 export class BeamSearchAlgorithm {
@@ -16,34 +17,35 @@ export class BeamSearchAlgorithm {
   ): SearchResult {
     const startTime = performance.now();
 
-    // Initialize the starting node
+    // Initialize
     const startNode = new SearchNode(initialBoard);
-
-    // Initialize beam with starting node
     let beam: SearchNode[] = [startNode];
 
-    // Keep track of visited states to avoid cycles
     const visited = new Set<string>();
     visited.add(startNode.getBoardString());
 
     let nodesVisited = 0;
     let maxBeamSize = 1;
 
-    // For statistics
     const beamSizeHistory: number[] = [1];
     let depthReached = 0;
 
-    // Main search loop
+    // Search loop
     while (beam.length > 0) {
       depthReached++;
-
-      // Get all successor nodes for the current beam
-      const successors: SearchNode[] = [];
+      
+      // Priority queue for successors
+      const successorQueue = new PriorityQueue<SearchNode>({
+        comparator: (a, b) => {
+          const aHeuristic = Heuristics.calculateHeuristic(a.board, heuristicType);
+          const bHeuristic = Heuristics.calculateHeuristic(b.board, heuristicType);
+          return aHeuristic - bHeuristic;
+        }
+      });
 
       for (const node of beam) {
         nodesVisited++;
 
-        // Check if node is goal
         if (node.board.isGoal()) {
           const endTime = performance.now();
           const executionTime = endTime - startTime;
@@ -63,10 +65,10 @@ export class BeamSearchAlgorithm {
           };
         }
 
-        // Get all possible moves for this node
+        // All possible moves
         const possibleMoves = MovementManager.getPossibleMoves(node.board);
 
-        // Create successor nodes for each possible move
+        // Create successor nodes
         for (const move of possibleMoves) {
           const newBoard = MovementManager.applyMove(node.board, move);
           const boardString = newBoard
@@ -74,12 +76,9 @@ export class BeamSearchAlgorithm {
             .map((row) => row.join(""))
             .join("");
 
-          // Skip if this state has been visited
           if (visited.has(boardString)) {
             continue;
           }
-
-          // Mark as visited
           visited.add(boardString);
 
           // Create new node
@@ -90,13 +89,13 @@ export class BeamSearchAlgorithm {
             node.cost + 1 // g(n) = parent's g(n) + 1
           );
 
-          // Add to successors
-          successors.push(newNode);
+          // Add to priority queue
+          successorQueue.queue(newNode);
         }
       }
 
-      // If no successors, the search has failed
-      if (successors.length === 0) {
+      // If no successors, failed
+      if (successorQueue.length === 0) {
         const endTime = performance.now();
         console.log(`Beam Search failed after exploring ${nodesVisited} nodes`);
 
@@ -108,35 +107,18 @@ export class BeamSearchAlgorithm {
         };
       }
 
-      // Sort successors by heuristic value
-      successors.sort((a, b) => {
-        const aHeuristic = Heuristics.calculateHeuristic(a.board, heuristicType);
-        const bHeuristic = Heuristics.calculateHeuristic(b.board, heuristicType);
-        return aHeuristic - bHeuristic;
-      });
+      // Top k nodes from priority queue
+      beam = [];
+      const count = Math.min(beamWidth, successorQueue.length);
+      for (let i = 0; i < count; i++) {
+        beam.push(successorQueue.dequeue());
+      }
 
-      // Keep only the best nodes up to beam width
-      beam = successors.slice(0, beamWidth);
-
-      // Update statistics
       maxBeamSize = Math.max(maxBeamSize, beam.length);
       beamSizeHistory.push(beam.length);
-
-      // Safety check: break if we've reached a very large depth or explored too many nodes
-      if (depthReached > 1000 || nodesVisited > 100000) {
-        const endTime = performance.now();
-        console.warn(`Beam Search exceeded limits: depth=${depthReached}, nodes=${nodesVisited}`);
-
-        return {
-          success: false,
-          path: [],
-          nodesVisited,
-          executionTime: endTime - startTime,
-        };
-      }
     }
 
-    // If beam is empty and no solution found
+    // Beam empty and no solution found
     const endTime = performance.now();
     return {
       success: false,
@@ -144,15 +126,5 @@ export class BeamSearchAlgorithm {
       nodesVisited,
       executionTime: endTime - startTime,
     };
-  }
-
-  // Override getName for this algorithm
-  static getName(): string {
-    return "BeamSearch";
-  }
-
-  // Override getDescription for this algorithm
-  static getDescription(): string {
-    return "Beam Search explores a limited number of the most promising nodes at each level, combining the efficiency of greedy search with some breadth.";
   }
 }
