@@ -27,7 +27,7 @@ const HeuristicInput = () => {
   };
 
   return (
-    <div className="bg-rush-primary p-5 rounded-2xl min-w-1/3 text-rush-accent-1">
+    <div className="bg-rush-primary p-5 rounded-2xl w-full text-rush-accent-1">
       <label className="block text-sm font-medium mb-2">Select Heuristic</label>
       <div className="">
         <select

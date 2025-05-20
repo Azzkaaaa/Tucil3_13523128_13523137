@@ -5,7 +5,7 @@ interface RenderBoardProps {
   activeMovePiece: string | null;
 }
 
-const RenderBoard: React.FC<RenderBoardProps> = ({ activeMovePiece }) => {
+const RenderBoard: React.FC<RenderBoardProps> = ({ activeMovePiece}) => {
   const { getCurrentBoard } = useGameStore();
   const currentBoard = getCurrentBoard();
   if (!currentBoard) return null;
@@ -34,7 +34,7 @@ const RenderBoard: React.FC<RenderBoardProps> = ({ activeMovePiece }) => {
   };
 
   return (
-    <div className="p-5 bg-rush-primary rounded-2xl">
+    <div className="p-5 bg-rush-primary rounded-2xl flex flex-col items-center justify-center">
       {/* Top exit */}
       {exitRow === -1 && (
         <div className="flex">

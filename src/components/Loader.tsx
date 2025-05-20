@@ -25,7 +25,7 @@ const Loader = () => {
   };
 
   return (
-    <div className="p-6 h-full w-2/5 rounded-2xl shadow-md bg-rush-primary text-rush-secondary">
+    <div className="p-6 h-full w-full rounded-2xl shadow-md bg-rush-primary text-rush-secondary">
       <h2 className="text-2xl font-semibold mb-4">Insert Game Configuration {`(.txt)`}</h2>
 
       <label className="block mb-4">
