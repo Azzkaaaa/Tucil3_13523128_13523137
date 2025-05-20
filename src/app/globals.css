@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #F3F3E0;
   --foreground: #171717;
+}
+
+@theme {
+  --color-rush-primary: #F3F3E0;
+  --color-rush-secondary: #27548A;
+  --color-rush-accent-1: #183B4E;
+  --color-rush-accent-2: #DDA853;
 }
 
 @theme inline {
