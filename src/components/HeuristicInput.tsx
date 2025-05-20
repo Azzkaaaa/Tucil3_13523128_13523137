@@ -1,6 +1,7 @@
 "use client";
 
-import useInputSearchStore from "@/store/InputSearchStore";
+import useGameStore from "@/store/GameStore";
+import { HeuristicType } from "@/store/GameStore";
 import React, { ChangeEvent } from "react";
 
 interface Heuristic {
@@ -9,19 +10,19 @@ interface Heuristic {
 }
 
 const HeuristicInput = () => {
-  const setHeuristic = useInputSearchStore((state) => state.setHeuristic);
-  const selectedHeuristic = useInputSearchStore((state) => state.selectedHeuristic);
+  const setHeuristic = useGameStore((state) => state.setHeuristic);
+  const selectedHeuristic = useGameStore((state) => state.selectedHeuristic);
 
   // List of heuristics
   const heuristics: Heuristic[] = [
-    { value: "1", label: "Heuristic 1" },
-    { value: "2", label: "Heuristic 2" },
-    { value: "3", label: "Heuristic 3" },
+    { value: HeuristicType.MANHATTAN, label: "Manhattan Distance" },
+    { value: HeuristicType.BLOCKING, label: "Blocking Pieces" },
+    { value: HeuristicType.DISTANCE, label: "Distance to Exit" },
   ];
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     e.preventDefault();
-    const selectedValue = e.target.value;
+    const selectedValue = e.target.value as HeuristicType;
     setHeuristic(selectedValue);
   };
 

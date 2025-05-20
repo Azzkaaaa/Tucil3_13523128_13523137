@@ -1,6 +1,7 @@
 "use client";
 
-import useInputSearchStore from "@/store/InputSearchStore";
+import useGameStore from "@/store/GameStore";
+import { AlgorithmType } from "@/store/GameStore";
 import React, { ChangeEvent } from "react";
 
 interface Algorithm {
@@ -9,19 +10,19 @@ interface Algorithm {
 }
 
 const AlgoInput = () => {
-  const selectedAlgorithm = useInputSearchStore((state) => state.selectedAlgorithm);
-  const setAlgorithm = useInputSearchStore((state) => state.setAlgorithm);
+  const selectedAlgorithm = useGameStore((state) => state.selectedAlgorithm);
+  const setAlgorithm = useGameStore((state) => state.setAlgorithm);
 
   // List of algorithms
   const algorithms: Algorithm[] = [
-    { value: "gbfs", label: "Greedy Best First Search" },
-    { value: "ucs", label: "Uniform Cost Search" },
-    { value: "a-star", label: "A* Search" },
+    { value: AlgorithmType.UCS, label: "Uniform Cost Search" },
+    { value: AlgorithmType.GBFS, label: "Greedy Best-First Search" },
+    { value: AlgorithmType.ASTAR, label: "A* Search" },
   ];
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     e.preventDefault();
-    const selectedValue = e.target.value;
+    const selectedValue = e.target.value as AlgorithmType;
     setAlgorithm(selectedValue);
   };
 
