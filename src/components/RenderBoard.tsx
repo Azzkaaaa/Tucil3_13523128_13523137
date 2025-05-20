@@ -30,43 +30,73 @@ const RenderBoard: React.FC<RenderBoardProps> = ({ activeMovePiece }) => {
       return "bg-blue-500";
     }
     // Empty cell
-    return "bg-gray-200";
+    return "bg-rush-accent-2/50";
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="p-5 bg-rush-primary rounded-2xl">
       {/* Top exit */}
       {exitRow === -1 && (
         <div className="flex">
           {Array.from({ length: cols }).map((_, j) => (
             <div
               key={`top-${j}`}
-              className={`w-12 h-6 flex items-center justify-center ${j === exitCol ? "bg-green-500" : "opacity-0"}`}>
+              className={`w-12 h-12 flex items-center justify-center  m-1 rounded-xl border-rush-accent-2 border ${
+                j === exitCol ? "bg-green-500" : "opacity-0"
+              }`}>
               {j === exitCol && "K"}
             </div>
           ))}
         </div>
       )}
 
-      {/* Grid rows */}
-      {Array.from({ length: rows }).map((_, i) => (
-        <div key={`row-${i}`} className="flex">
-          {/* Left exit */}
-          {exitRow === i && exitCol === -1 && <div className="w-6 h-12 flex items-center justify-center bg-green-500">K</div>}
+      {/* Main grid with left and right exits */}
+      <div className="flex">
+        {/* Left exit */}
+        {exitCol === -1 && (
+          <div className="flex flex-col">
+            {Array.from({ length: rows }).map((_, i) => (
+              <div
+                key={`left-${i}`}
+                className={`w-12 h-12 flex items-center justify-center m-1 rounded-xl border-rush-accent-2 border ${
+                  i === exitRow ? "bg-green-500" : "opacity-0"
+                }`}>
+                {i === exitRow && "K"}
+              </div>
+            ))}
+          </div>
+        )}
 
-          {/* Grid cells */}
-          {Array.from({ length: cols }).map((_, j) => (
-            <div
-              key={`cell-${i}-${j}`}
-              className={`w-12 h-12 flex items-center justify-center border border-gray-400 ${getCellColor(grid[i][j])}`}>
-              {grid[i][j]}
+        {/* Main grid */}
+        <div className="flex flex-col">
+          {Array.from({ length: rows }).map((_, i) => (
+            <div key={`row-${i}`} className="flex">
+              {Array.from({ length: cols }).map((_, j) => (
+                <div
+                  key={`cell-${i}-${j}`}
+                  className={`w-12 h-12 flex items-center justify-center rounded-xl m-1 border-rush-accent-2 border ${getCellColor(grid[i][j])}`}>
+                  {grid[i][j] !== "." ? grid[i][j] : ""}
+                </div>
+              ))}
             </div>
           ))}
-
-          {/* Right exit */}
-          {exitRow === i && exitCol === cols && <div className="w-6 h-12 flex items-center justify-center bg-green-500">K</div>}
         </div>
-      ))}
+
+        {/* Right exit */}
+        {exitCol === cols && (
+          <div className="flex flex-col">
+            {Array.from({ length: rows }).map((_, i) => (
+              <div
+                key={`right-${i}`}
+                className={`w-12 h-12 flex items-center justify-center m-1 rounded-xl border-rush-accent-2 border ${
+                  i === exitRow ? "bg-green-500" : "opacity-0"
+                }`}>
+                {i === exitRow && "K"}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Bottom exit */}
       {exitRow === rows && (
@@ -74,7 +104,9 @@ const RenderBoard: React.FC<RenderBoardProps> = ({ activeMovePiece }) => {
           {Array.from({ length: cols }).map((_, j) => (
             <div
               key={`bottom-${j}`}
-              className={`w-12 h-6 flex items-center justify-center ${j === exitCol ? "bg-green-500" : "opacity-0"}`}>
+              className={`w-12 h-12 flex items-center justify-center  m-1 rounded-xl border-rush-accent-2 border ${
+                j === exitCol ? "bg-green-500" : "opacity-0"
+              }`}>
               {j === exitCol && "K"}
             </div>
           ))}

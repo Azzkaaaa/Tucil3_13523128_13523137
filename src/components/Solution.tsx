@@ -60,11 +60,11 @@ const SolutionDisplay = () => {
       </div>
 
       <div className="flex gap-8">
-        <div className="flex-1">
+        <div className="">
             <RenderBoard activeMovePiece={activeMovePiece}/>
         </div>
 
-        <div className="flex-1">
+        <div className="">
           {solution ? (
             <div>
               <h3 className="text-xl font-semibold mb-4">Solution</h3>
